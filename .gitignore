@@ -20,3 +20,6 @@
 .beads/*.db-wal
 .dolt/
 # --- END PORTABLE BEADS (agentic-kit) ---
+
+# Node
+node_modules/
