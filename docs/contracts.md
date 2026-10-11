@@ -121,7 +121,10 @@ and `exerciseId`/`day` against `routine` when `routine` is given.
 ## 3. Drive layout (per user)
 
 The web app runs **as the person visiting it** (`executeAs: USER_ACCESSING`, access: anyone
-with a Google account) with only the `drive.file` scope. Each user's history lives in their own
+with a Google account) with only the `drive.file` and `script.external_request` scopes.
+Drive is accessed through the **Drive REST API v3 via `UrlFetchApp`** with the visitor's token
+(`ScriptApp.getOAuthToken()`). **Never `DriveApp`:** every DriveApp method requires the full
+`drive` or `drive.readonly` scope, and the Advanced Drive service can't download content. Each user's history lives in their own
 Drive, in a folder this app created; the app can't see any other file in their Drive.
 
 ```

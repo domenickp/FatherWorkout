@@ -11,7 +11,10 @@ person's phone and desktop. `README.md` is the user-facing description.
 
 **Architecture:** a **Google Apps Script web app** that runs **as the visitor**
 (`executeAs: USER_ACCESSING`, access `ANYONE` = any signed-in Google account) with only the
-`drive.file` scope. The script serves the page (`src/index.html`) and reads/writes **one JSON
+`drive.file` scope (plus `script.external_request`). Drive access goes through the Drive REST
+API via `UrlFetchApp`, **never `DriveApp`**: DriveApp needs the full `drive` scope for every
+method, and the first multi-user release failed in production on exactly that. The script
+serves the page (`src/index.html`) and reads/writes **one JSON
 file per workout** in the visitor's own Drive (`FatherWorkout Data/sessions/`). There is no
 server or database of ours. The owner can't see anyone's data, and the app can't see any
 Drive file it didn't create.
