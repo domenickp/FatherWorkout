@@ -23,3 +23,6 @@
 
 # Node
 node_modules/
+
+# Claude Code agent worktrees (per-machine, never committed)
+.claude/worktrees/
