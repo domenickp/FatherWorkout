@@ -4,6 +4,6 @@
   "private": true,
   "description": "Mobile workout tracker: Google Apps Script web app with Drive JSON storage",
   "scripts": {
-    "test": "node --test test/"
+    "test": "node --test \"test/*.test.js\""
   }
 }
