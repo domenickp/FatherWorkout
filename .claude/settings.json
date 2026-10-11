@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bd prime)",
+      "Bash(bd list*)",
+      "Bash(bd ready*)",
+      "Bash(bd show *)",
+      "Bash(bd stats*)",
+      "Bash(bd blocked*)",
+      "Bash(bd dep tree *)",
+      "Bash(bd search *)",
+      "Bash(bd memories *)",
+      "Bash(bd doctor)",
+      "Bash(bd import --dry-run)"
+    ]
+  }
+}
