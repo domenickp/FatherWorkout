@@ -1,0 +1,451 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "spreadsheetId": "1vfiCFaBWlTc-K-sxayqttrKzbzbo45z-y4GoTqgkQwk",
+    "tab": "Expanded Routine"
+  },
+  "days": [
+    {
+      "day": 1,
+      "areas": "Chest, Triceps",
+      "exercises": [
+        {
+          "id": "d1-warm-up-stationary-bike",
+          "name": "Warm Up: Stationary Bike",
+          "warmup": true,
+          "sets": 1,
+          "reps": null,
+          "weightLb": null,
+          "timeMin": 10,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d1-warm-up-dumbell-press",
+          "name": "Warm Up: Dumbell Press",
+          "warmup": true,
+          "sets": 1,
+          "reps": 12,
+          "weightLb": 25,
+          "timeMin": null,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d1-dumbbell-press",
+          "name": "Dumbbell Press",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 45,
+          "timeMin": null,
+          "rest": "2 min",
+          "notes": null
+        },
+        {
+          "id": "d1-incline-dumbbell-press",
+          "name": "Incline Dumbbell Press",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 40,
+          "timeMin": null,
+          "rest": "2 min",
+          "notes": "Bench at about 30 degrees. Targets upper chest."
+        },
+        {
+          "id": "d1-dumbbell-flys",
+          "name": "Dumbbell Flys",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 25,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        },
+        {
+          "id": "d1-push-ups",
+          "name": "Push Ups",
+          "warmup": false,
+          "sets": 3,
+          "reps": 20,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": "With a weighted backpack, 20 pounds"
+        },
+        {
+          "id": "d1-skullcrushers",
+          "name": "Skullcrushers",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 20,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        },
+        {
+          "id": "d1-overhead-dumbbell-triceps-extension",
+          "name": "Overhead Dumbbell Triceps Extension",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 30,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": "One dumbbell held with both hands, seated with back support."
+        },
+        {
+          "id": "d1-diamond-push-ups",
+          "name": "Diamond Push Ups",
+          "warmup": false,
+          "sets": 3,
+          "reps": 22,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "areas": "Legs",
+      "exercises": [
+        {
+          "id": "d2-warm-up-stationary-bike",
+          "name": "Warm Up: Stationary Bike",
+          "warmup": true,
+          "sets": 1,
+          "reps": null,
+          "weightLb": null,
+          "timeMin": 15,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d2-warm-up-body-weight-squat",
+          "name": "Warm Up: Body Weight Squat",
+          "warmup": true,
+          "sets": 3,
+          "reps": 15,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": "60 sec",
+          "notes": null
+        },
+        {
+          "id": "d2-goblet-squat",
+          "name": "Goblet Squat",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 40,
+          "timeMin": null,
+          "rest": "2 min",
+          "notes": null
+        },
+        {
+          "id": "d2-dumbbell-romanian-deadlift",
+          "name": "Dumbbell Romanian Deadlift",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 40,
+          "timeMin": null,
+          "rest": "2 min",
+          "notes": "Weight is per hand. Push hips back, slight knee bend, flat back. You should feel it in the hamstrings."
+        },
+        {
+          "id": "d2-bulgarian-split-squat",
+          "name": "Bulgarian Split Squat",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 17.5,
+          "timeMin": null,
+          "rest": "90 sec",
+          "notes": null
+        },
+        {
+          "id": "d2-dumbbell-lunge",
+          "name": "Dumbbell Lunge",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 25,
+          "timeMin": null,
+          "rest": "90 sec",
+          "notes": null
+        },
+        {
+          "id": "d2-hip-thrust",
+          "name": "Hip Thrust",
+          "warmup": false,
+          "sets": 3,
+          "reps": 15,
+          "weightLb": 50,
+          "timeMin": null,
+          "rest": "90 sec",
+          "notes": "Upper back on a bench, dumbbell resting on hips. Squeeze at the top."
+        },
+        {
+          "id": "d2-single-leg-calf-raise",
+          "name": "Single-Leg Calf Raise",
+          "warmup": false,
+          "sets": 3,
+          "reps": 15,
+          "weightLb": 25,
+          "timeMin": null,
+          "rest": "60 sec",
+          "notes": "Each leg. Hold the dumbbell on the working side, other hand on a wall for balance."
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "areas": "Back, Biceps",
+      "exercises": [
+        {
+          "id": "d3-warm-up-stationary-bike",
+          "name": "Warm Up: Stationary Bike",
+          "warmup": true,
+          "sets": 1,
+          "reps": null,
+          "weightLb": null,
+          "timeMin": 10,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d3-warm-up-dumbell-row",
+          "name": "Warm Up: Dumbell Row",
+          "warmup": true,
+          "sets": 1,
+          "reps": 12,
+          "weightLb": 25,
+          "timeMin": null,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d3-pullups",
+          "name": "Pullups",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": "2 min",
+          "notes": "10 pound leg weights"
+        },
+        {
+          "id": "d3-dumbbell-row",
+          "name": "Dumbbell Row",
+          "warmup": false,
+          "sets": 3,
+          "reps": 15,
+          "weightLb": 52.5,
+          "timeMin": null,
+          "rest": "90 sec",
+          "notes": null
+        },
+        {
+          "id": "d3-chest-supported-incline-row",
+          "name": "Chest-Supported Incline Row",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 35,
+          "timeMin": null,
+          "rest": "90 sec",
+          "notes": "Lie face down on an incline bench and row both dumbbells."
+        },
+        {
+          "id": "d3-dumbbell-shrugs",
+          "name": "Dumbbell Shrugs",
+          "warmup": false,
+          "sets": 3,
+          "reps": 15,
+          "weightLb": 52.5,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        },
+        {
+          "id": "d3-dumbbell-curl",
+          "name": "Dumbbell Curl",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 35,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        },
+        {
+          "id": "d3-incline-dumbbell-curl",
+          "name": "Incline Dumbbell Curl",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 20,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": "Seated on an incline bench, arms hanging straight down."
+        },
+        {
+          "id": "d3-seated-hammer-curl",
+          "name": "Seated Hammer Curl",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 30,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        },
+        {
+          "id": "d3-dead-hangs",
+          "name": "Dead Hangs",
+          "warmup": false,
+          "sets": 3,
+          "reps": null,
+          "weightLb": null,
+          "timeMin": 1,
+          "rest": "60 sec",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "areas": "Shoulders, Abs",
+      "exercises": [
+        {
+          "id": "d4-warm-up-stationary-bike",
+          "name": "Warm Up: Stationary Bike",
+          "warmup": true,
+          "sets": 1,
+          "reps": null,
+          "weightLb": null,
+          "timeMin": 10,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d4-warm-up-arm-circles",
+          "name": "Warm Up: Arm Circles",
+          "warmup": true,
+          "sets": 1,
+          "reps": 12,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d4-warm-up-shoulder-press",
+          "name": "Warm Up: Shoulder Press",
+          "warmup": true,
+          "sets": 1,
+          "reps": 25,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": null,
+          "notes": null
+        },
+        {
+          "id": "d4-seated-dumbbell-shoulder-press",
+          "name": "Seated Dumbbell Shoulder Press",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 40,
+          "timeMin": null,
+          "rest": "2 min",
+          "notes": null
+        },
+        {
+          "id": "d4-arnold-press",
+          "name": "Arnold Press",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 25,
+          "timeMin": null,
+          "rest": "90 sec",
+          "notes": null
+        },
+        {
+          "id": "d4-lateral-raises",
+          "name": "Lateral Raises",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": 22.5,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        },
+        {
+          "id": "d4-bench-rear-delt-fly",
+          "name": "Bench Rear Delt Fly",
+          "warmup": false,
+          "sets": 3,
+          "reps": 15,
+          "weightLb": 12.5,
+          "timeMin": null,
+          "rest": "60 sec",
+          "notes": "Light weight, squeeze the shoulder blades together."
+        },
+        {
+          "id": "d4-side-lying-external-rotation",
+          "name": "Side-Lying External Rotation",
+          "warmup": false,
+          "sets": 2,
+          "reps": 15,
+          "weightLb": 5,
+          "timeMin": null,
+          "rest": "60 sec",
+          "notes": "Each arm. Very light and slow. Protects the rotator cuff."
+        },
+        {
+          "id": "d4-russian-twist",
+          "name": "Russian Twist",
+          "warmup": false,
+          "sets": 3,
+          "reps": 20,
+          "weightLb": 52.5,
+          "timeMin": null,
+          "rest": "60 sec",
+          "notes": null
+        },
+        {
+          "id": "d4-ab-rollout",
+          "name": "Ab Rollout",
+          "warmup": false,
+          "sets": 3,
+          "reps": 20,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": "60–90 sec",
+          "notes": null
+        },
+        {
+          "id": "d4-leg-raises",
+          "name": "Leg Raises",
+          "warmup": false,
+          "sets": 3,
+          "reps": 12,
+          "weightLb": null,
+          "timeMin": null,
+          "rest": "60 sec",
+          "notes": "10 pound leg weights"
+        }
+      ]
+    }
+  ]
+}
