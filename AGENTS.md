@@ -5,54 +5,54 @@ This is the single source of truth for agents working in this repo (Claude and o
 
 ## Project
 
-A mobile-friendly workout tracker. It shows the user's current routine and logs progress from
-one workout to the next, syncing across phone and desktop.
+A mobile-friendly workout tracker, shared as **one web app that anyone with a Google account
+can use**. It shows a fixed routine (the owner's), logs each workout, and syncs across a
+person's phone and desktop. `README.md` is the user-facing description.
 
-**Architecture (decided):** a **Google Apps Script web app** running under the user's Google
-account. The script serves the HTML page and reads/writes **JSON files in a Google Drive
-folder**. There is no separate server, Google Cloud project or OAuth client. The page can be
-added to the phone's home screen. It needs a connection while logging (no offline mode in v1).
+**Architecture:** a **Google Apps Script web app** that runs **as the visitor**
+(`executeAs: USER_ACCESSING`, access `ANYONE` = any signed-in Google account) with only the
+`drive.file` scope. The script serves the page (`src/index.html`) and reads/writes **one JSON
+file per workout** in the visitor's own Drive (`FatherWorkout Data/sessions/`). There is no
+server or database of ours. The owner can't see anyone's data, and the app can't see any
+Drive file it didn't create.
 
-Rejected alternative, for context: a locally saved HTML page reading Drive JSON by file path.
-Browsers block `file://` pages from reading other local files, and the mobile Drive apps don't
-expose a synced folder, so it can't work on phones.
+- **Routine:** the same for everyone, bundled into the server as `src/Routine.js`, generated
+  from `data/expanded-routine.csv` (a snapshot of the owner's sheet, tab "Expanded Routine") by
+  `node tools/export-routine.js`. To change the routine: update the CSV, re-run the exporter,
+  commit, release.
+- **Per-user state:** only the data-folder id, in **User Properties** (never Script
+  Properties, which are shared by all users).
+- Schemas, Drive layout and server API: `docs/contracts.md`.
+- Rejected alternative, for context: a locally saved HTML page reading Drive JSON by file path
+  doesn't work, because browsers block `file://` pages from reading other files and phones
+  have no synced Drive folder.
 
-**Data:**
-- Source routine: Google Sheet "Father Workout" (`1vfiCFaBWlTc-K-sxayqttrKzbzbo45z-y4GoTqgkQwk`),
-  tab **"Expanded Routine"** (98 rows × 15 columns). It is exported once to `routine.json`.
-- Workout history: **one JSON file per session** (not one growing file), so two devices
-  can't overwrite each other's writes.
-- Exact schemas live in `docs/contracts.md` (to be written; see the bd epic).
+**Tooling:** clasp (`npm i -g @google/clasp`). Tests are Node built-ins only: `npm test`.
+`test/server.test.js` runs the real server code against an in-memory fake of DriveApp and
+PropertiesService (two users), so most server behaviour is testable without deploying.
+`node dev/build-preview.js` builds `dev/preview.html` with a mock backend for UI work.
 
-**Tooling:** Apps Script code lives in this repo and is pushed with **clasp**
-(`npm i -g @google/clasp`). Pure logic is unit-tested locally with Node. Drive access and
-the web page can only be tested after a deploy.
+**Deployment config is local, not in git:** `.clasp.json` (script id) and `deploy.local.json`
+(web-app deployment id). See the `*.example` files. On a new machine, get them from the owner
+or from `clasp list-scripts` / `clasp list-deployments`.
 
-**Deployment (live):**
-- Apps Script project: `1gUJSZiN2heh3er9DHijGIiB3Ae2aNT4twRzGlysEeAN51a7gx-TngzEe` (`.clasp.json`, rootDir `src/`)
-- Web app (stable URL, access: only the owner):
-  `https://script.google.com/macros/s/AKfycbxQoYvCjBIEAvHcdUlarQsQ7QbGfrKknOY4RtLuIYYUhw1Ujoai_DMnq3iXyHejDMSMqg/exec`
-- Test URL (always runs the latest pushed code; owner only):
-  `https://script.google.com/macros/s/AKfycbwVfHHIYoOHTAa47COCiSUZGLXY2cQnRaZ9EiqCJ_IC/dev`
-- Drive data: folder `FatherWorkout Data` (`1F29tzRZshMaFGo0NQyT70O_9ECFZaNvi`) holds `routine.json`
-  and `sessions/`. If the routine sheet changes, run `node tools/export-routine.js` and replace
-  `routine.json` in that folder.
-- **Releasing a change:** `npm test`, then `clasp push`, check the `/dev` URL, then
-  `clasp update-deployment AKfycbxQoYvCjBIEAvHcdUlarQsQ7QbGfrKknOY4RtLuIYYUhw1Ujoai_DMnq3iXyHejDMSMqg -d "vN: …"`.
-  Always *update* that deployment. `clasp create-deployment` makes a new URL and breaks the
-  phone's home-screen shortcut.
+- **Releasing a change:** `npm run release -- "vN: what changed"`. It runs the tests, runs
+  `clasp push`, and **updates** the existing deployment so the public URL stays the same.
+  Never `clasp create-deployment` for a release: it makes a new URL and breaks everyone's
+  home-screen shortcut and the friendly-URL redirect.
+- Public entry point: `https://fatherworkout.petrellafamily.com`, a Namecheap URL redirect
+  to the deployment's `/exec` URL.
 - `clasp create-script` overwrites `src/appsscript.json` with a default. Restore it from git.
 
-**Agents must not:** run `clasp login`, enable the Apps Script API, change deployment
-access settings, or `clasp deploy` to the live web-app URL without the human's go-ahead.
-These steps are `[human]` issues. `clasp push` to the dev head is fine for the coordinator.
-Builders never push or deploy.
+**Agents must not:** run `clasp login`, enable the Apps Script API, change deployment access
+settings in the manifest, or release to the live URL without the human's go-ahead. These are
+`[human]` issues or need explicit approval. Builders never push or deploy.
 
 ## Who this is for
 
-The user is comfortable with code and is using this small project for two things: a working
-workout tracker for personal use, and **a trial of the coordinator/builder agent workflow**
-before using it on larger projects. Notes on how the workflow performed (what briefs worked,
+The owner is comfortable with code. The project is both a workout tracker shared with family
+and friends, and **a trial of the coordinator/builder agent workflow** before using it on larger
+projects. Notes on how the workflow performed (what briefs worked,
 where builders went wrong) are worth recording as bd issues or in this file.
 
 ---

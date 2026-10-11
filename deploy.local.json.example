@@ -1,0 +1,3 @@
+{
+  "deploymentId": "<web app deployment id from `clasp list-deployments` (not the @HEAD one)>"
+}

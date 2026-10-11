@@ -26,3 +26,7 @@ node_modules/
 
 # Claude Code agent worktrees (per-machine, never committed)
 .claude/worktrees/
+
+# Per-person Apps Script config (ids of your own script and deployment)
+.clasp.json
+deploy.local.json

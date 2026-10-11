@@ -873,8 +873,10 @@ var FW = (function () {
     }
     root.appendChild(h('h2', { class: 'sec', text: 'Recent workouts' }));
     var recent = app.data.recent || [];
+    var whereNote = h('p', { class: 'muted', text: 'Your workouts are saved in your own Google Drive, in the folder “FatherWorkout Data”. Only you can see them.' });
     if (!recent.length) {
       root.appendChild(h('p', { class: 'muted', text: 'No workouts saved yet.' }));
+      root.appendChild(whereNote);
       return;
     }
     recent.forEach(function (s) {
@@ -884,6 +886,7 @@ var FW = (function () {
           h('span', { text: 'Day ' + s.day + ' · ' + (areas[s.day] || '') + (s.completedAt ? '' : ' · partial') })),
         h('div', { class: 'hist-sets' }, h('b', { text: String(s.setsDone) }), 'sets')));
     });
+    root.appendChild(whereNote);
   }
 
   function openSession(id) {

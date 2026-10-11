@@ -15,20 +15,21 @@ the coordinator's approval. If something seems wrong, implement it as written an
 | Path | Owner | Purpose |
 |---|---|---|
 | `docs/contracts.md`, `package.json`, `data/expanded-routine.csv` | coordinator | contracts, test runner, sheet snapshot (input) |
-| `tools/export-routine.js`, `data/routine.json`, `test/routine.test.js` | **routine builder** (fw-o2k.3) | CSV → routine.json |
+| `tools/export-routine.js`, `data/routine.json`, `src/Routine.js`, `test/routine.test.js` | **routine builder** (fw-o2k.3) | CSV → routine.json + bundled `src/Routine.js` |
 | `src/Lib.js`, `src/Code.js`, `test/lib.test.js` | **backend builder** (fw-o2k.4) | pure logic + Apps Script server |
 | `src/index.html`, `dev/`, `test/ui.test.js` | **UI builder** (fw-o2k.5) | mobile page + local preview |
-| `appsscript.json`, `.clasp.json`, `.claspignore` | coordinator (fw-o2k.6) | deploy config |
+| `src/appsscript.json`, `tools/release.js`, `test/server.test.js`, `*.example` | coordinator | deploy config, release, multi-user server test |
 
 ## 1. `routine.json`
 
-Generated from `data/expanded-routine.csv`. It is stored in Drive as `routine.json` in the
-data folder (§3).
+Generated from `data/expanded-routine.csv`. The same routine is bundled into the server as
+`src/Routine.js` (`var ROUTINE_ = …`); every user gets this routine, and it is not stored in
+anyone's Drive.
 
 ```json
 {
   "schemaVersion": 1,
-  "source": { "spreadsheetId": "1vfiCFaBWlTc-K-sxayqttrKzbzbo45z-y4GoTqgkQwk", "tab": "Expanded Routine" },
+  "source": { "tab": "Expanded Routine" },
   "days": [
     {
       "day": 1,
@@ -117,20 +118,24 @@ Rules:
 human-readable error strings, empty when the session is valid. It checks every rule above,
 and `exerciseId`/`day` against `routine` when `routine` is given.
 
-## 3. Drive layout
+## 3. Drive layout (per user)
+
+The web app runs **as the person visiting it** (`executeAs: USER_ACCESSING`, access: anyone
+with a Google account) with only the `drive.file` scope. Each user's history lives in their own
+Drive, in a folder this app created; the app can't see any other file in their Drive.
 
 ```
-My Drive/
-└── FatherWorkout Data/            folder; its id is cached in Script Property DATA_FOLDER_ID
-    ├── routine.json
+<the visitor's> My Drive/
+└── FatherWorkout Data/            created on first visit; id cached in User Property DATA_FOLDER_ID
     └── sessions/
         └── 2026-10-11T143000Z_d1_0b9c6a8e.json
 ```
 
-- **Folder lookup:** use the Script Property `DATA_FOLDER_ID` if it's set and the folder
-  exists. Otherwise find a non-trashed folder named `FatherWorkout Data` in My Drive root and
-  cache its id. If there isn't one, create it and cache the id. Create `sessions/` the same way
-  (by name, inside the data folder).
+- **Folder lookup:** use the **User** Property `DATA_FOLDER_ID` (per user, per script; never
+  Script Properties, which are shared by every user) if it's set and the folder exists.
+  Otherwise find a non-trashed folder named `FatherWorkout Data` in My Drive root (with
+  `drive.file`, only app-created folders are visible) and cache its id. If there isn't one,
+  create it and cache the id. Create `sessions/` the same way (by name, inside the data folder).
 - **Session file name:** `sessionFileName(session)` returns
   `<startedAt with ':' removed from the time part, milliseconds dropped, ending in 'Z'>_d<day>_<first 8 chars of id>.json`.
   Example: `"2026-10-11T14:30:00.000Z"` → `2026-10-11T143000Z_d1_0b9c6a8e.json`. Colons are
@@ -147,7 +152,7 @@ and throws an `Error` with a readable message on failure. The client receives th
 | Function | Returns |
 |---|---|
 | `doGet(e)` | `HtmlService.createHtmlOutputFromFile('index')`, `.setTitle('Father Workout')`, `.addMetaTag('viewport', 'width=device-width, initial-scale=1')` |
-| `getAppData()` | `{ routine, recent: SessionSummary[], lastByDay: { "1": Session\|null, "2": …, "3": …, "4": … } }`. `recent` is the 20 newest summaries, newest first. `lastByDay[d]` is the newest *completed* session for day `d` (full object), or `null` |
+| `getAppData()` | `{ routine` (the bundled `ROUTINE_`)`, recent: SessionSummary[], lastByDay: { "1": Session\|null, "2": …, "3": …, "4": … } }`. `recent` is the 20 newest summaries, newest first. `lastByDay[d]` is the newest *completed* session for day `d` (full object), or `null` |
 | `saveSession(session)` | Validates with `validateSession(session, routine)` and throws `Error('Invalid session: ' + errors.join('; '))` on failure. Writes the file. Returns `{ id, fileName, savedAt }` |
 | `listSessions(limit)` | `SessionSummary[]`, newest first. `limit` defaults to 50 |
 | `getSession(id)` | Full `Session` (including `savedAt`) for that id, or throws `Error('Session not found: ' + id)` |

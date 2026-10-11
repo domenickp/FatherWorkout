@@ -31,7 +31,7 @@ test('slugify', () => {
 test('structure: 4 days, 38 exercises, areas', () => {
   assert.strictEqual(routine.schemaVersion, 1);
   assert.deepStrictEqual(routine.source, {
-    spreadsheetId: '1vfiCFaBWlTc-K-sxayqttrKzbzbo45z-y4GoTqgkQwk', tab: 'Expanded Routine',
+    tab: 'Expanded Routine',
   });
   assert.deepStrictEqual(routine.days.map((d) => d.day), [1, 2, 3, 4]);
   assert.deepStrictEqual(routine.days.map((d) => d.areas),
@@ -86,8 +86,8 @@ test('committed routine.json matches generator and re-runs are byte-identical', 
     const a = path.join(tmp, 'a.json');
     const b = path.join(tmp, 'b.json');
     // Absolute paths resolve as-is, independent of cwd.
-    execFileSync(process.execPath, [script, csvPath, a], { cwd: tmp });
-    execFileSync(process.execPath, [script, csvPath, b], { cwd: tmp });
+    execFileSync(process.execPath, [script, csvPath, a, path.join(tmp, 'a.js')], { cwd: tmp });
+    execFileSync(process.execPath, [script, csvPath, b, path.join(tmp, 'b.js')], { cwd: tmp });
     const bufA = fs.readFileSync(a);
     assert.ok(bufA.equals(fs.readFileSync(b)));
     assert.ok(bufA.equals(fs.readFileSync(jsonPath)), 'data/routine.json is stale; re-run the exporter');
@@ -97,4 +97,10 @@ test('committed routine.json matches generator and re-runs are byte-identical', 
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
+});
+
+test('src/Routine.js bundles exactly data/routine.json', () => {
+  const { routineScript } = require(path.join(__dirname, '..', 'tools', 'export-routine.js'));
+  const bundled = fs.readFileSync(path.join(__dirname, '..', 'src', 'Routine.js'), 'utf8');
+  assert.strictEqual(bundled.replace(/\r\n/g, '\n'), routineScript(routine), 'regenerate with: node tools/export-routine.js');
 });

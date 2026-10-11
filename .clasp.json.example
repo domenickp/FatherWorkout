@@ -1,0 +1,4 @@
+{
+  "scriptId": "<your Apps Script project id: run `clasp create-script --type standalone --title \"Father Workout\" --rootDir src`, or paste an existing one>",
+  "rootDir": "src"
+}

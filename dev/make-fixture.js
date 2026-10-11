@@ -48,7 +48,7 @@ function build(csv) {
   }
   return {
     schemaVersion: 1,
-    source: { spreadsheetId: '1vfiCFaBWlTc-K-sxayqttrKzbzbo45z-y4GoTqgkQwk', tab: 'Expanded Routine' },
+    source: { tab: 'Expanded Routine' },
     days: [...days.values()].sort((a, b) => a.day - b.day),
   };
 }
