@@ -94,6 +94,11 @@
   /* set rows */
   .set { border-top: 1px solid var(--border); padding: 8px 0; }
   .set-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .set-btns { display: flex; align-items: center; gap: 8px; }
+  .remove-btn {
+    min-height: 44px; min-width: 44px; padding: 0; border-radius: 22px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted); font-size: 1.3rem; line-height: 1; cursor: pointer;
+  }
   .set-n { font-weight: 600; font-size: .9rem; color: var(--muted); }
   .done-btn {
     min-height: 44px; min-width: 96px; padding: 0 14px; border-radius: 22px;
@@ -428,6 +433,12 @@ var FW = (function () {
     return out;
   }
 
+  // Sets without the one at idx. Never removes the last remaining set.
+  function removeSetAt(sets, idx) {
+    if (!Array.isArray(sets) || sets.length <= 1 || idx < 0 || idx >= sets.length) return sets.slice();
+    return sets.slice(0, idx).concat(sets.slice(idx + 1));
+  }
+
   function cleanNote(s) {
     if (s === null || s === undefined) return null;
     s = String(s).trim();
@@ -500,7 +511,7 @@ var FW = (function () {
 
   return {
     toNum: toNum, formatNum: formatNum, parseRestSeconds: parseRestSeconds, formatTarget: formatTarget,
-    defaultDay: defaultDay, formatLastTime: formatLastTime, isTimed: isTimed, initialSets: initialSets,
+    defaultDay: defaultDay, formatLastTime: formatLastTime, isTimed: isTimed, initialSets: initialSets, removeSetAt: removeSetAt,
     buildSession: buildSession, summarize: summarize, countDone: countDone, formatClock: formatClock,
     formatSessionDate: formatSessionDate
   };
@@ -822,15 +833,25 @@ var FW = (function () {
     var setsBox = h('div');
     card.appendChild(setsBox);
 
-    function addRow(idx) {
-      setsBox.appendChild(setRow(ex, rec, idx, timed, restSec));
+    // Rows are rebuilt whenever the set list changes, so "Set N" numbering and the
+    // remove buttons always match rec.sets.
+    function renderRows() {
+      setsBox.textContent = '';
+      rec.sets.forEach(function (s, i) {
+        setsBox.appendChild(setRow(ex, rec, i, timed, restSec, removeRow));
+      });
     }
-    rec.sets.forEach(function (s, i) { addRow(i); });
+    function removeRow(idx) {
+      rec.sets = FW.removeSetAt(rec.sets, idx);
+      renderRows();
+      markDirty();
+    }
+    renderRows();
 
     var actions = h('div', { class: 'card-actions' });
     actions.appendChild(h('button', { class: 'link-btn', type: 'button', text: '+ Add set', onclick: function () {
       rec.sets.push(newSetFor(ex, rec.sets, lastEntry));
-      addRow(rec.sets.length - 1);
+      renderRows();
       markDirty();
     } }));
     var noteWrap = h('div');
@@ -873,7 +894,7 @@ var FW = (function () {
         h('button', { type: 'button', 'aria-label': 'Increase ' + label, text: '+', onclick: function () { bump(step); } })));
   }
 
-  function setRow(ex, rec, idx, timed, restSec) {
+  function setRow(ex, rec, idx, timed, restSec, onRemove) {
     var s = rec.sets[idx];
     var row = h('div', { class: 'set' + (s.done ? ' is-done' : '') });
     var doneBtn = h('button', {
@@ -887,7 +908,13 @@ var FW = (function () {
         if (s.done && restSec) startRest(restSec, ex.name);
       }
     });
-    row.appendChild(h('div', { class: 'set-head' }, h('span', { class: 'set-n', text: 'Set ' + (idx + 1) }), doneBtn));
+    var removeBtn = rec.sets.length > 1
+      ? h('button', { class: 'remove-btn', type: 'button', 'aria-label': 'Remove set ' + (idx + 1) + ' of ' + ex.name, title: 'Remove set',
+          text: '×', onclick: function () { onRemove(idx); } })
+      : null;
+    row.appendChild(h('div', { class: 'set-head' },
+      h('span', { class: 'set-n', text: 'Set ' + (idx + 1) }),
+      h('div', { class: 'set-btns' }, removeBtn, doneBtn)));
     var fields = h('div', { class: 'fields' + (timed ? ' one' : '') });
     if (timed) {
       fields.appendChild(stepper('Minutes', 'min', s.timeMin, 1, function (v) { s.timeMin = v; markDirty(); }));

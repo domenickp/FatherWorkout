@@ -229,3 +229,14 @@ test('preview builds and mock backend follows section 4 shapes', async () => {
   const list = plain(await call('listSessions', 50));
   assert.ok(list.some((s) => s.id === session.id && s.setsDone === 1 && s.exerciseCount === 1));
 });
+
+test('removeSetAt removes one set, keeps at least one, never mutates', () => {
+  const sets = [{ reps: 1 }, { reps: 2 }, { reps: 3 }];
+  assert.deepStrictEqual(plain(FW.removeSetAt(sets, 1)), [{ reps: 1 }, { reps: 3 }]);
+  assert.deepStrictEqual(plain(FW.removeSetAt(sets, 0)), [{ reps: 2 }, { reps: 3 }]);
+  assert.deepStrictEqual(plain(FW.removeSetAt(sets, 2)), [{ reps: 1 }, { reps: 2 }]);
+  assert.strictEqual(sets.length, 3, 'input not mutated');
+  assert.deepStrictEqual(plain(FW.removeSetAt([{ reps: 9 }], 0)), [{ reps: 9 }], 'last set is kept');
+  assert.deepStrictEqual(plain(FW.removeSetAt(sets, 5)), plain(sets), 'out of range is a no-op');
+  assert.deepStrictEqual(plain(FW.removeSetAt(sets, -1)), plain(sets), 'negative index is a no-op');
+});
