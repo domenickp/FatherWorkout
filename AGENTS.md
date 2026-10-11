@@ -28,6 +28,21 @@ expose a synced folder, so it can't work on phones.
 (`npm i -g @google/clasp`). Pure logic is unit-tested locally with Node. Drive access and
 the web page can only be tested after a deploy.
 
+**Deployment (live):**
+- Apps Script project: `1gUJSZiN2heh3er9DHijGIiB3Ae2aNT4twRzGlysEeAN51a7gx-TngzEe` (`.clasp.json`, rootDir `src/`)
+- Web app (stable URL, access: only the owner):
+  `https://script.google.com/macros/s/AKfycbxQoYvCjBIEAvHcdUlarQsQ7QbGfrKknOY4RtLuIYYUhw1Ujoai_DMnq3iXyHejDMSMqg/exec`
+- Test URL (always runs the latest pushed code; owner only):
+  `https://script.google.com/macros/s/AKfycbwVfHHIYoOHTAa47COCiSUZGLXY2cQnRaZ9EiqCJ_IC/dev`
+- Drive data: folder `FatherWorkout Data` (`1F29tzRZshMaFGo0NQyT70O_9ECFZaNvi`) holds `routine.json`
+  and `sessions/`. If the routine sheet changes, run `node tools/export-routine.js` and replace
+  `routine.json` in that folder.
+- **Releasing a change:** `npm test`, then `clasp push`, check the `/dev` URL, then
+  `clasp update-deployment AKfycbxQoYvCjBIEAvHcdUlarQsQ7QbGfrKknOY4RtLuIYYUhw1Ujoai_DMnq3iXyHejDMSMqg -d "vN: …"`.
+  Always *update* that deployment. `clasp create-deployment` makes a new URL and breaks the
+  phone's home-screen shortcut.
+- `clasp create-script` overwrites `src/appsscript.json` with a default. Restore it from git.
+
 **Agents must not:** run `clasp login`, enable the Apps Script API, change deployment
 access settings, or `clasp deploy` to the live web-app URL without the human's go-ahead.
 These steps are `[human]` issues. `clasp push` to the dev head is fine for the coordinator.
