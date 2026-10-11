@@ -5,12 +5,40 @@ This is the single source of truth for agents working in this repo (Claude and o
 
 ## Project
 
-_Describe what this project is, its layout, how to build, test and deploy it, and anything
-an agent can't safely do (binary assets, production deploys, credentials)._
+A mobile-friendly workout tracker. It shows the user's current routine and logs progress from
+one workout to the next, syncing across phone and desktop.
+
+**Architecture (decided):** a **Google Apps Script web app** running under the user's Google
+account. The script serves the HTML page and reads/writes **JSON files in a Google Drive
+folder**. There is no separate server, Google Cloud project or OAuth client. The page can be
+added to the phone's home screen. It needs a connection while logging (no offline mode in v1).
+
+Rejected alternative, for context: a locally saved HTML page reading Drive JSON by file path.
+Browsers block `file://` pages from reading other local files, and the mobile Drive apps don't
+expose a synced folder, so it can't work on phones.
+
+**Data:**
+- Source routine: Google Sheet "Father Workout" (`1vfiCFaBWlTc-K-sxayqttrKzbzbo45z-y4GoTqgkQwk`),
+  tab **"Expanded Routine"** (98 rows × 15 columns). It is exported once to `routine.json`.
+- Workout history: **one JSON file per session** (not one growing file), so two devices
+  can't overwrite each other's writes.
+- Exact schemas live in `docs/contracts.md` (to be written; see the bd epic).
+
+**Tooling:** Apps Script code lives in this repo and is pushed with **clasp**
+(`npm i -g @google/clasp`). Pure logic is unit-tested locally with Node. Drive access and
+the web page can only be tested after a deploy.
+
+**Agents must not:** run `clasp login`, enable the Apps Script API, change deployment
+access settings, or `clasp deploy` to the live web-app URL without the human's go-ahead.
+These steps are `[human]` issues. `clasp push` to the dev head is fine for the coordinator.
+Builders never push or deploy.
 
 ## Who this is for
 
-_Describe the human: their experience level and what they want from agents (learning vs. shipping)._
+The user is comfortable with code and is using this small project for two things: a working
+workout tracker for personal use, and **a trial of the coordinator/builder agent workflow**
+before using it on larger projects. Notes on how the workflow performed (what briefs worked,
+where builders went wrong) are worth recording as bd issues or in this file.
 
 ---
 
