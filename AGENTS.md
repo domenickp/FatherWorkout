@@ -109,8 +109,13 @@ id). Where the same id appears twice, keep the newer `updated_at`. Then `bd impo
 
 ## Multi-agent workflow (agentic-kit)
 
-Larger work runs as **coordinator + builders** (the `coordinate` skill and the `builder` agent
-from the agentic-kit plugin):
+**All code changes go through the coordinator/builder workflow.** The coordinator loads the
+`coordinate` skill, files or claims a bd issue, and dispatches `agentic-kit:builder` (Sonnet)
+with a self-contained brief. The coordinator does not edit `src/`, `test/` or `tools/` itself.
+Exceptions: docs-only edits, one-line config fixes, and anything the user says to do directly.
+This is a standing instruction: it counts as the user asking for subagents, every session.
+
+The workflow uses the `coordinate` skill and the `builder` agent from the agentic-kit plugin:
 - The coordinator (Opus) breaks work into bd issues, commits interface contracts, dispatches
   builders, verifies their work independently, merges, and closes issues.
 - Builders (Sonnet) implement one scoped brief, commit on their branch, and report back.
