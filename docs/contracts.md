@@ -43,6 +43,7 @@ anyone's Drive.
           "reps": null,
           "weightLb": null,
           "timeMin": 10,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -54,6 +55,7 @@ anyone's Drive.
           "reps": 12,
           "weightLb": 40,
           "timeMin": null,
+          "timeSec": null,
           "rest": "2 min",
           "notes": "Bench at about 30 degrees. Targets upper chest."
         }
@@ -69,8 +71,10 @@ Rules:
   characters replaced by `-` and no leading or trailing `-`. Ids must be unique across the
   file; if a name repeats within a day, add `-2`, `-3`, and so on.
 - `warmup` is true when the name starts with `Warm Up:` (case-insensitive).
-- `sets`, `reps`, `weightLb` and `timeMin` are numbers (decimals allowed, e.g. `17.5`), or
-  `null` when the cell is blank. `rest` and `notes` are trimmed strings, or `null` when blank.
+- `sets`, `reps`, `weightLb`, `timeMin` and `timeSec` are numbers (decimals allowed, e.g.
+  `17.5`), or `null` when the cell is blank. `timeSec` comes from the optional CSV column
+  `Time (seconds)`; if the column is absent, `timeSec` is `null` on every exercise. An exercise
+  sets at most one of `timeMin` / `timeSec` (the exporter throws if a row has both). `rest` and `notes` are trimmed strings, or `null` when blank.
   Keep `rest` text as written (e.g. `"60–90 sec"` with the en dash).
 - The `Week 1`–`Week 6` columns are ignored in v1.
 - Don't add an export timestamp: the output must be byte-identical when re-run on the same CSV.
@@ -89,9 +93,9 @@ Rules:
       "exerciseId": "d1-incline-dumbbell-press",
       "name": "Incline Dumbbell Press",
       "sets": [
-        { "reps": 12, "weightLb": 40, "timeMin": null, "done": true },
-        { "reps": 10, "weightLb": 40, "timeMin": null, "done": true },
-        { "reps": null, "weightLb": null, "timeMin": null, "done": false }
+        { "reps": 12, "weightLb": 40, "timeMin": null, "timeSec": null, "done": true },
+        { "reps": 10, "weightLb": 40, "timeMin": null, "timeSec": null, "done": true },
+        { "reps": null, "weightLb": null, "timeMin": null, "timeSec": null, "done": false }
       ],
       "notes": "Felt heavy on set 2"
     }
@@ -108,7 +112,9 @@ Rules:
 - `entries`: one per exercise the user touched, in routine order. `exerciseId` must exist
   in the routine for that day. `name` is copied from the routine, so history stays readable
   if the routine changes later.
-- Each set's `reps`, `weightLb` and `timeMin` are numbers ≥ 0 or `null`. `done` is a boolean.
+- Each set's `reps`, `weightLb`, `timeMin` and `timeSec` are numbers ≥ 0 or `null`. `done` is
+  a boolean. `timeSec` may be absent (sessions saved before it existed); absent means `null`.
+  The client always writes all four fields.
   Every entry has at least one set.
 - `notes` (entry level and session level) are strings or `null`.
 - The server adds `"savedAt"` (ISO string) when it writes the file. The client never sends
@@ -193,7 +199,10 @@ One self-contained HTML file: inline CSS and JS, no external scripts, fonts or i
   - "Last time" line from `lastByDay[day]`: that exercise's done sets, e.g. `12×40, 12×40, 10×40`,
     or `—` if there isn't one.
   - One row per target set (`sets` rows): numeric inputs for reps and weight (or minutes for
-    `timeMin` exercises), plus a Done toggle. Prefill from last time's matching set if it
+    `timeMin` exercises, stepping by 1; or seconds for `timeSec` exercises, stepping by 5), plus
+    a Done toggle. A `timeSec` exercise shows its target as e.g. `3 × 60 s` and last time as
+    e.g. `60 s, 55 s`. When prefilling a `timeSec` exercise from an older set that has only
+    `timeMin`, use `timeMin × 60`. Prefill from last time's matching set if it
     exists, otherwise from the target. Fields left blank in the routine stay blank.
   - An "add set" control appends a row.
   - Optional per-exercise notes field.
