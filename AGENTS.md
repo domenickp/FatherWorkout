@@ -85,6 +85,12 @@ git push             # work is not done until this succeeds
 key has no effect. The pre-commit hook block in `.beads/hooks/pre-commit` (outside bd's
 managed markers) is what keeps the JSONL current.
 
+**Export before you import.** `bd import` overwrites local issue changes that aren't in the
+JSONL yet: a `bd close` or `bd update` made since your last commit is silently reverted to the
+file's older state. If you changed issues since the last commit, run
+`bd export -o .beads/issues.jsonl` and commit it before any `git pull` + `bd import`. (Hit on
+2026-10-13: fw-70p was closed, then reopened by the import after a pull.)
+
 ### Fresh clone on a new machine
 
 ```bash
@@ -126,6 +132,7 @@ The workflow uses the `coordinate` skill and the `builder` agent from the agenti
 1. File bd issues for unfinished or discovered work.
 2. Run the quality gates (tests/build) if code changed.
 3. Close finished issues; update in-progress ones.
-4. `git pull --rebase && bd import`, then `git commit` (which exports issues) and `git push`.
+4. `bd export -o .beads/issues.jsonl` and commit, then `git pull --rebase && bd import`,
+   then `git commit` (which exports issues) and `git push`.
 5. `git status` must show "up to date with origin".
 6. Hand off: what's done, what's in progress, and the next ready issue.
