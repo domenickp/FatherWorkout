@@ -92,6 +92,8 @@ test('validateSession: broken rules', () => {
   expectError(s => { s.entries[0].sets[0].reps = -1; }, /reps/);
   expectError(s => { s.entries[0].sets[0].weightLb = '40'; }, /weightLb/);
   expectError(s => { s.entries[0].sets[0].timeMin = NaN; }, /timeMin/);
+  expectError(s => { s.entries[0].sets[0].timeSec = -5; }, /timeSec/);
+  expectError(s => { s.entries[0].sets[0].timeSec = '60'; }, /timeSec/);
   expectError(s => { s.entries[0].sets[0].done = 'yes'; }, /done must be a boolean/);
   expectError(s => { s.entries[0].notes = 5; }, /entries\[0\]\.notes/);
   expectError(s => { s.notes = 5; }, /^notes/);
@@ -143,4 +145,12 @@ test('latestCompletedByDay', () => {
   assert.strictEqual(out['2'], null);
   assert.strictEqual(out['3'].id, 'd3');
   assert.strictEqual(out['4'], null);
+});
+
+test('validateSession: timeSec number, null or absent is valid', () => {
+  for (const v of [60, 0, null, undefined]) {
+    const s = valid();
+    if (v === undefined) delete s.entries[0].sets[0].timeSec; else s.entries[0].sets[0].timeSec = v;
+    assert.deepStrictEqual(validateSession(s, routine), [], String(v));
+  }
 });

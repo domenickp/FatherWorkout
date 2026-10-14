@@ -257,6 +257,8 @@ var FW = (function () {
     if (ex.reps !== null && ex.reps !== undefined) {
       main = (ex.sets || 1) + ' × ' + formatNum(ex.reps);
       if (ex.weightLb !== null && ex.weightLb !== undefined) main += ' @ ' + formatNum(ex.weightLb) + ' lb';
+    } else if (ex.timeSec !== null && ex.timeSec !== undefined) {
+      main = (ex.sets > 1 ? ex.sets + ' × ' : '') + formatNum(ex.timeSec) + ' s';
     } else if (ex.timeMin !== null && ex.timeMin !== undefined) {
       main = (ex.sets > 1 ? ex.sets + ' × ' : '') + formatNum(ex.timeMin) + ' min';
     } else if (ex.sets) {
@@ -294,17 +296,33 @@ var FW = (function () {
       var hasReps = s.reps !== null && s.reps !== undefined;
       var hasW = s.weightLb !== null && s.weightLb !== undefined;
       var hasT = s.timeMin !== null && s.timeMin !== undefined;
+      var hasS = s.timeSec !== null && s.timeSec !== undefined;
       if (hasReps && hasW) return formatNum(s.reps) + '×' + formatNum(s.weightLb);
       if (hasReps) return formatNum(s.reps);
       if (hasW) return formatNum(s.weightLb) + ' lb';
+      if (hasS) return formatNum(s.timeSec) + ' s';
       if (hasT) return formatNum(s.timeMin) + ' min';
       return '✓';
     }).join(', ');
   }
 
-  // True when this exercise is logged as minutes rather than reps/weight.
+  // True when this exercise is logged as time (minutes or seconds) rather than reps/weight.
   function isTimed(ex) {
-    return (ex.reps === null || ex.reps === undefined) && ex.timeMin !== null && ex.timeMin !== undefined;
+    return (ex.reps === null || ex.reps === undefined) &&
+      ((ex.timeMin !== null && ex.timeMin !== undefined) || isSeconds(ex));
+  }
+
+  // True when the timed exercise is logged in seconds (stepper steps by 5).
+  function isSeconds(ex) {
+    return (ex.reps === null || ex.reps === undefined) && ex.timeSec !== null && ex.timeSec !== undefined;
+  }
+
+  // Seconds for a saved set: timeSec, else legacy timeMin x 60, else null.
+  function setSeconds(p) {
+    var sec = toNum(p.timeSec);
+    if (sec !== null) return sec;
+    var min = toNum(p.timeMin);
+    return min === null ? null : min * 60;
   }
 
   // Starting set rows for an exercise: last time's matching done set, else the target.
@@ -315,11 +333,15 @@ var FW = (function () {
     for (var i = 0; i < count; i++) {
       var p = prev[i];
       if (p) {
-        out.push({ reps: toNum(p.reps), weightLb: toNum(p.weightLb), timeMin: toNum(p.timeMin), done: false });
+        if (isSeconds(ex)) {
+          out.push({ reps: toNum(p.reps), weightLb: toNum(p.weightLb), timeMin: null, timeSec: setSeconds(p), done: false });
+        } else {
+          out.push({ reps: toNum(p.reps), weightLb: toNum(p.weightLb), timeMin: toNum(p.timeMin), timeSec: toNum(p.timeSec), done: false });
+        }
       } else if (isTimed(ex)) {
-        out.push({ reps: null, weightLb: null, timeMin: toNum(ex.timeMin), done: false });
+        out.push({ reps: null, weightLb: null, timeMin: toNum(ex.timeMin), timeSec: toNum(ex.timeSec), done: false });
       } else {
-        out.push({ reps: toNum(ex.reps), weightLb: toNum(ex.weightLb), timeMin: null, done: false });
+        out.push({ reps: toNum(ex.reps), weightLb: toNum(ex.weightLb), timeMin: null, timeSec: null, done: false });
       }
     }
     return out;
@@ -349,12 +371,13 @@ var FW = (function () {
           reps: toNum(s.reps),
           weightLb: toNum(s.weightLb),
           timeMin: toNum(s.timeMin),
+          timeSec: toNum(s.timeSec),
           done: !!s.done
         };
       });
       var anyDone = sets.some(function (s) { return s.done; });
       if (!anyDone && note === null) return;
-      if (!sets.length) sets.push({ reps: null, weightLb: null, timeMin: null, done: false });
+      if (!sets.length) sets.push({ reps: null, weightLb: null, timeMin: null, timeSec: null, done: false });
       entries.push({ exerciseId: ex.id, name: ex.name, sets: sets, notes: note });
     });
     return {
@@ -403,7 +426,7 @@ var FW = (function () {
 
   return {
     toNum: toNum, formatNum: formatNum, parseRestSeconds: parseRestSeconds, formatTarget: formatTarget,
-    defaultDay: defaultDay, formatLastTime: formatLastTime, isTimed: isTimed, initialSets: initialSets, removeSetAt: removeSetAt,
+    defaultDay: defaultDay, formatLastTime: formatLastTime, isTimed: isTimed, isSeconds: isSeconds, initialSets: initialSets, removeSetAt: removeSetAt,
     buildSession: buildSession, summarize: summarize, countDone: countDone, formatClock: formatClock,
     formatSessionDate: formatSessionDate
   };
@@ -552,7 +575,7 @@ var FW = (function () {
         if (d && Array.isArray(d.sets) && d.sets.length) {
           app.log[id] = {
             sets: d.sets.map(function (s) {
-              return { reps: FW.toNum(s.reps), weightLb: FW.toNum(s.weightLb), timeMin: FW.toNum(s.timeMin), done: !!s.done };
+              return { reps: FW.toNum(s.reps), weightLb: FW.toNum(s.weightLb), timeMin: FW.toNum(s.timeMin), timeSec: FW.toNum(s.timeSec), done: !!s.done };
             }),
             notes: d.notes || ''
           };
@@ -566,7 +589,7 @@ var FW = (function () {
     var prevRow = sets[sets.length - 1];
     var lastSet = last && last.sets.filter(function (s) { return s.done; })[sets.length];
     var src = lastSet || prevRow || {};
-    return { reps: FW.toNum(src.reps), weightLb: FW.toNum(src.weightLb), timeMin: FW.toNum(src.timeMin), done: false };
+    return { reps: FW.toNum(src.reps), weightLb: FW.toNum(src.weightLb), timeMin: FW.toNum(src.timeMin), timeSec: FW.toNum(src.timeSec), done: false };
   }
 
   /* ---------- rest timer ---------- */
@@ -809,7 +832,11 @@ var FW = (function () {
       h('div', { class: 'set-btns' }, removeBtn, doneBtn)));
     var fields = h('div', { class: 'fields' + (timed ? ' one' : '') });
     if (timed) {
-      fields.appendChild(stepper('Minutes', 'min', s.timeMin, 1, function (v) { s.timeMin = v; markDirty(); }));
+      if (FW.isSeconds(ex)) {
+        fields.appendChild(stepper('Seconds', 's', s.timeSec, 5, function (v) { s.timeSec = v; markDirty(); }));
+      } else {
+        fields.appendChild(stepper('Minutes', 'min', s.timeMin, 1, function (v) { s.timeMin = v; markDirty(); }));
+      }
     } else {
       fields.appendChild(stepper('Reps', 'reps', s.reps, 1, function (v) { s.reps = v; markDirty(); }));
       fields.appendChild(stepper('Weight (lb)', 'lb', s.weightLb, 2.5, function (v) { s.weightLb = v; markDirty(); }));
@@ -922,7 +949,7 @@ var FW = (function () {
     s.entries.forEach(function (e) {
       var card = h('section', { class: 'card' }, h('div', { class: 'ex-head' }, h('h3', { text: e.name })));
       e.sets.forEach(function (st, i) {
-        var txt = FW.formatLastTime({ sets: [{ reps: st.reps, weightLb: st.weightLb, timeMin: st.timeMin, done: true }] });
+        var txt = FW.formatLastTime({ sets: [{ reps: st.reps, weightLb: st.weightLb, timeMin: st.timeMin, timeSec: st.timeSec, done: true }] });
         card.appendChild(h('div', { class: 'detail-set' + (st.done ? '' : ' skipped') },
           h('span', { text: 'Set ' + (i + 1) }),
           h('span', { text: st.done ? txt : 'skipped' })));

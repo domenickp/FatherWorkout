@@ -40,7 +40,7 @@ test('structure: 4 days, 38 exercises, areas', () => {
 });
 
 test('every exercise has the contract keys and types; ids unique and well-formed', () => {
-  const keys = ['id', 'name', 'warmup', 'sets', 'reps', 'weightLb', 'timeMin', 'rest', 'notes'];
+  const keys = ['id', 'name', 'warmup', 'sets', 'reps', 'weightLb', 'timeMin', 'timeSec', 'rest', 'notes'];
   const num = (v) => v === null || (typeof v === 'number' && Number.isFinite(v));
   const str = (v) => v === null || (typeof v === 'string' && v === v.trim() && v !== '');
   for (const e of all) {
@@ -48,7 +48,7 @@ test('every exercise has the contract keys and types; ids unique and well-formed
     assert.strictEqual(typeof e.id, 'string');
     assert.strictEqual(typeof e.name, 'string');
     assert.strictEqual(typeof e.warmup, 'boolean');
-    assert.ok(num(e.sets) && num(e.reps) && num(e.weightLb) && num(e.timeMin), e.id);
+    assert.ok(num(e.sets) && num(e.reps) && num(e.weightLb) && num(e.timeMin) && num(e.timeSec), e.id);
     assert.ok(str(e.rest) && str(e.notes), e.id);
     assert.match(e.id, /^d[1-4]-[a-z0-9]+(-[a-z0-9]+)*$/);
   }
@@ -60,7 +60,8 @@ test('spot checks', () => {
   assert.strictEqual(byId('d2-bulgarian-split-squat').weightLb, 17.5);
   const hang = byId('d3-dead-hangs');
   assert.strictEqual(hang.reps, null);
-  assert.strictEqual(hang.timeMin, 1);
+  assert.strictEqual(hang.timeMin, null);
+  assert.strictEqual(hang.timeSec, 60);
   assert.strictEqual(hang.rest, '60 sec');
   assert.strictEqual(byId('d1-dumbbell-flys').rest, '60–90 sec');
   const bike = byId('d1-warm-up-stationary-bike');
@@ -103,4 +104,19 @@ test('src/Routine.js bundles exactly data/routine.json', () => {
   const { routineScript } = require(path.join(__dirname, '..', 'tools', 'export-routine.js'));
   const bundled = fs.readFileSync(path.join(__dirname, '..', 'src', 'Routine.js'), 'utf8');
   assert.strictEqual(bundled.replace(/\r\n/g, '\n'), routineScript(routine), 'regenerate with: node tools/export-routine.js');
+});
+
+test('Time (seconds) column: present, absent, and both-values error', () => {
+  const head = 'Day,Areas,Exercise,Sets,Reps per set,Weight (pounds),Time (minutes),';
+  const tail = 'Rest between sets,Notes';
+  const withCol = head + 'Time (seconds),' + tail + '\n1,A,Hang,3,,,,60,60 sec,\n1,A,Bike,1,,,10,,,\n';
+  const r1 = buildRoutine(withCol).days[0].exercises;
+  assert.deepStrictEqual([r1[0].timeMin, r1[0].timeSec], [null, 60]);
+  assert.deepStrictEqual([r1[1].timeMin, r1[1].timeSec], [10, null]);
+  assert.deepStrictEqual(Object.keys(r1[0]).slice(6, 8), ['timeMin', 'timeSec']);
+  const noCol = head + tail + '\n1,A,Bike,1,,,10,,\n';
+  const r2 = buildRoutine(noCol).days[0].exercises;
+  assert.deepStrictEqual([r2[0].timeMin, r2[0].timeSec], [10, null]);
+  const both = head + 'Time (seconds),' + tail + '\n1,A,Oops,1,,,1,30,,\n';
+  assert.throws(() => buildRoutine(both), /both Time \(minutes\) and Time \(seconds\)/);
 });

@@ -84,9 +84,11 @@ function buildRoutine(csvText) {
     if (idx < 0) throw new Error(`Missing CSV column: ${n}`);
     return idx;
   };
+  // Optional column: an absent header means no exercise is timed in seconds.
+  const optCol = (n) => header.indexOf(n);
   const C = {
     day: col('Day'), areas: col('Areas'), name: col('Exercise'), sets: col('Sets'),
-    reps: col('Reps per set'), weight: col('Weight (pounds)'), time: col('Time (minutes)'),
+    reps: col('Reps per set'), weight: col('Weight (pounds)'), time: col('Time (minutes)'), timeSec: optCol('Time (seconds)'),
     rest: col('Rest between sets'), notes: col('Notes'),
   };
 
@@ -108,6 +110,12 @@ function buildRoutine(csvText) {
     for (let n = 2; usedIds.has(id); n++) id = `${base}-${n}`;
     usedIds.add(id);
 
+    const timeMin = toNumber(r[C.time], `Time (row ${line})`);
+    const timeSec = C.timeSec < 0 ? null : toNumber(r[C.timeSec], `Time seconds (row ${line})`);
+    if (timeMin !== null && timeSec !== null) {
+      throw new Error(`Row ${line} (${name}) has both Time (minutes) and Time (seconds); use only one`);
+    }
+
     d.exercises.push({
       id,
       name,
@@ -115,7 +123,8 @@ function buildRoutine(csvText) {
       sets: toNumber(r[C.sets], `Sets (row ${line})`),
       reps: toNumber(r[C.reps], `Reps (row ${line})`),
       weightLb: toNumber(r[C.weight], `Weight (row ${line})`),
-      timeMin: toNumber(r[C.time], `Time (row ${line})`),
+      timeMin,
+      timeSec,
       rest: toText(r[C.rest]),
       notes: toText(r[C.notes]),
     });

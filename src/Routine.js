@@ -17,6 +17,7 @@ var ROUTINE_ = {
           "reps": null,
           "weightLb": null,
           "timeMin": 10,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -28,6 +29,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 25,
           "timeMin": null,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -39,6 +41,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 45,
           "timeMin": null,
+          "timeSec": null,
           "rest": "2 min",
           "notes": null
         },
@@ -50,6 +53,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 40,
           "timeMin": null,
+          "timeSec": null,
           "rest": "2 min",
           "notes": "Bench at about 30 degrees. Targets upper chest."
         },
@@ -61,6 +65,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 25,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         },
@@ -72,6 +77,7 @@ var ROUTINE_ = {
           "reps": 20,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": "With a weighted backpack, 20 pounds"
         },
@@ -83,6 +89,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 20,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         },
@@ -94,6 +101,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 30,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": "One dumbbell held with both hands, seated with back support."
         },
@@ -105,6 +113,7 @@ var ROUTINE_ = {
           "reps": 22,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         }
@@ -122,6 +131,7 @@ var ROUTINE_ = {
           "reps": null,
           "weightLb": null,
           "timeMin": 15,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -133,6 +143,7 @@ var ROUTINE_ = {
           "reps": 15,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60 sec",
           "notes": null
         },
@@ -144,6 +155,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 40,
           "timeMin": null,
+          "timeSec": null,
           "rest": "2 min",
           "notes": null
         },
@@ -155,6 +167,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 40,
           "timeMin": null,
+          "timeSec": null,
           "rest": "2 min",
           "notes": "Weight is per hand. Push hips back, slight knee bend, flat back. You should feel it in the hamstrings."
         },
@@ -166,6 +179,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 17.5,
           "timeMin": null,
+          "timeSec": null,
           "rest": "90 sec",
           "notes": null
         },
@@ -177,6 +191,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 25,
           "timeMin": null,
+          "timeSec": null,
           "rest": "90 sec",
           "notes": null
         },
@@ -188,6 +203,7 @@ var ROUTINE_ = {
           "reps": 15,
           "weightLb": 50,
           "timeMin": null,
+          "timeSec": null,
           "rest": "90 sec",
           "notes": "Upper back on a bench, dumbbell resting on hips. Squeeze at the top."
         },
@@ -199,6 +215,7 @@ var ROUTINE_ = {
           "reps": 15,
           "weightLb": 25,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60 sec",
           "notes": "Each leg. Hold the dumbbell on the working side, other hand on a wall for balance."
         }
@@ -216,6 +233,7 @@ var ROUTINE_ = {
           "reps": null,
           "weightLb": null,
           "timeMin": 10,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -227,6 +245,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 25,
           "timeMin": null,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -238,6 +257,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": "2 min",
           "notes": "10 pound leg weights"
         },
@@ -249,6 +269,7 @@ var ROUTINE_ = {
           "reps": 15,
           "weightLb": 52.5,
           "timeMin": null,
+          "timeSec": null,
           "rest": "90 sec",
           "notes": null
         },
@@ -260,6 +281,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 35,
           "timeMin": null,
+          "timeSec": null,
           "rest": "90 sec",
           "notes": "Lie face down on an incline bench and row both dumbbells."
         },
@@ -271,6 +293,7 @@ var ROUTINE_ = {
           "reps": 15,
           "weightLb": 52.5,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         },
@@ -282,6 +305,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 35,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         },
@@ -293,6 +317,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 20,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": "Seated on an incline bench, arms hanging straight down."
         },
@@ -304,6 +329,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 30,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         },
@@ -314,7 +340,8 @@ var ROUTINE_ = {
           "sets": 3,
           "reps": null,
           "weightLb": null,
-          "timeMin": 1,
+          "timeMin": null,
+          "timeSec": 60,
           "rest": "60 sec",
           "notes": null
         }
@@ -332,6 +359,7 @@ var ROUTINE_ = {
           "reps": null,
           "weightLb": null,
           "timeMin": 10,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -343,6 +371,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -354,6 +383,7 @@ var ROUTINE_ = {
           "reps": 25,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": null,
           "notes": null
         },
@@ -365,6 +395,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 40,
           "timeMin": null,
+          "timeSec": null,
           "rest": "2 min",
           "notes": null
         },
@@ -376,6 +407,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 25,
           "timeMin": null,
+          "timeSec": null,
           "rest": "90 sec",
           "notes": null
         },
@@ -387,6 +419,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": 22.5,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         },
@@ -398,6 +431,7 @@ var ROUTINE_ = {
           "reps": 15,
           "weightLb": 12.5,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60 sec",
           "notes": "Light weight, squeeze the shoulder blades together."
         },
@@ -409,6 +443,7 @@ var ROUTINE_ = {
           "reps": 15,
           "weightLb": 5,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60 sec",
           "notes": "Each arm. Very light and slow. Protects the rotator cuff."
         },
@@ -420,6 +455,7 @@ var ROUTINE_ = {
           "reps": 20,
           "weightLb": 52.5,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60 sec",
           "notes": null
         },
@@ -431,6 +467,7 @@ var ROUTINE_ = {
           "reps": 20,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60–90 sec",
           "notes": null
         },
@@ -442,6 +479,7 @@ var ROUTINE_ = {
           "reps": 12,
           "weightLb": null,
           "timeMin": null,
+          "timeSec": null,
           "rest": "60 sec",
           "notes": "10 pound leg weights"
         }

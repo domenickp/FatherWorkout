@@ -97,18 +97,18 @@ test('initialSets prefills from last time, else target', () => {
   const e = ex('x', { sets: 3, reps: 12, weightLb: 40 });
   const last = { sets: [
     { reps: 12, weightLb: 45, timeMin: null, done: true },
-    { reps: 10, weightLb: 45, timeMin: null, done: true },
+    { reps: 10, weightLb: 45, timeMin: null, timeSec: null, done: true },
   ] };
   assert.deepStrictEqual(plain(FW.initialSets(e, last)), [
-    { reps: 12, weightLb: 45, timeMin: null, done: false },
-    { reps: 10, weightLb: 45, timeMin: null, done: false },
-    { reps: 12, weightLb: 40, timeMin: null, done: false },
+    { reps: 12, weightLb: 45, timeMin: null, timeSec: null, done: false },
+    { reps: 10, weightLb: 45, timeMin: null, timeSec: null, done: false },
+    { reps: 12, weightLb: 40, timeMin: null, timeSec: null, done: false },
   ]);
   assert.strictEqual(FW.initialSets(e, null).length, 3);
   const bw = ex('bw', { reps: 20, weightLb: null });
-  assert.deepStrictEqual(plain(FW.initialSets(bw, null)[0]), { reps: 20, weightLb: null, timeMin: null, done: false });
+  assert.deepStrictEqual(plain(FW.initialSets(bw, null)[0]), { reps: 20, weightLb: null, timeMin: null, timeSec: null, done: false });
   const timed = ex('t', { sets: 1, reps: null, weightLb: null, timeMin: 10 });
-  assert.deepStrictEqual(plain(FW.initialSets(timed, null)), [{ reps: null, weightLb: null, timeMin: 10, done: false }]);
+  assert.deepStrictEqual(plain(FW.initialSets(timed, null)), [{ reps: null, weightLb: null, timeMin: 10, timeSec: null, done: false }]);
 });
 
 function checkSession(s) {
@@ -128,8 +128,8 @@ function checkSession(s) {
     assert.ok(e.notes === null || typeof e.notes === 'string');
     assert.ok(e.sets.length >= 1);
     for (const st of e.sets) {
-      assert.deepStrictEqual(Object.keys(st).sort(), ['done', 'reps', 'timeMin', 'weightLb']);
-      assert.ok(isNum(st.reps) && isNum(st.weightLb) && isNum(st.timeMin));
+      assert.deepStrictEqual(Object.keys(st).sort(), ['done', 'reps', 'timeMin', 'timeSec', 'weightLb']);
+      assert.ok(isNum(st.reps) && isNum(st.weightLb) && isNum(st.timeMin) && isNum(st.timeSec));
       assert.strictEqual(typeof st.done, 'boolean');
     }
   }
@@ -158,8 +158,8 @@ test('buildSession includes only touched exercises and matches contract shape', 
   checkSession(s);
   assert.deepStrictEqual(s.entries.map((e) => e.exerciseId), [a.id, c.id, d.id]); // routine order
   assert.strictEqual(s.entries[1].name, c.name);
-  assert.deepStrictEqual(s.entries[1].sets[0], { reps: 12, weightLb: 45, timeMin: null, done: true });
-  assert.deepStrictEqual(s.entries[1].sets[2], { reps: null, weightLb: null, timeMin: null, done: false });
+  assert.deepStrictEqual(s.entries[1].sets[0], { reps: 12, weightLb: 45, timeMin: null, timeSec: null, done: true });
+  assert.deepStrictEqual(s.entries[1].sets[2], { reps: null, weightLb: null, timeMin: null, timeSec: null, done: false });
   assert.strictEqual(s.entries[1].notes, 'Felt heavy');
   assert.strictEqual(s.entries[0].notes, null);
   assert.strictEqual(s.notes, 'good session');
@@ -179,7 +179,7 @@ test('buildSession: empty workout has no entries; partial save keeps null comple
   log[day.exercises[0].id] = { sets: [{ reps: -3, weightLb: 'abc', timeMin: NaN, done: true }], notes: null };
   const bad = plain(FW.buildSession({ id: 'i', day: 2, startedAt: '2026-10-11T14:30:00.000Z', completedAt: null, notes: null, exercises: day.exercises, log }));
   checkSession(bad);
-  assert.deepStrictEqual(bad.entries[0].sets[0], { reps: null, weightLb: null, timeMin: null, done: true });
+  assert.deepStrictEqual(bad.entries[0].sets[0], { reps: null, weightLb: null, timeMin: null, timeSec: null, done: true });
 });
 
 test('summarize, countDone, formatClock, toNum', () => {
@@ -239,4 +239,29 @@ test('removeSetAt removes one set, keeps at least one, never mutates', () => {
   assert.deepStrictEqual(plain(FW.removeSetAt([{ reps: 9 }], 0)), [{ reps: 9 }], 'last set is kept');
   assert.deepStrictEqual(plain(FW.removeSetAt(sets, 5)), plain(sets), 'out of range is a no-op');
   assert.deepStrictEqual(plain(FW.removeSetAt(sets, -1)), plain(sets), 'negative index is a no-op');
+});
+
+test('timeSec exercises: target, last time, prefill (incl. legacy timeMin), session', () => {
+  const hang = ex('h', { reps: null, weightLb: null, timeMin: null, timeSec: 60, rest: '60 sec' });
+  assert.strictEqual(FW.formatTarget(hang), '3 × 60 s · rest 60 sec');
+  assert.strictEqual(FW.formatTarget(ex('h1', { sets: 1, reps: null, weightLb: null, timeSec: 45, rest: null })), '45 s');
+  assert.ok(FW.isTimed(hang) && FW.isSeconds(hang));
+  assert.ok(!FW.isSeconds(ex('m', { reps: null, weightLb: null, timeMin: 10 })));
+  assert.strictEqual(FW.formatLastTime({ sets: [
+    { reps: null, weightLb: null, timeMin: null, timeSec: 60, done: true },
+    { reps: null, weightLb: null, timeMin: null, timeSec: 55, done: true },
+    { reps: null, weightLb: null, timeMin: null, timeSec: 50, done: false },
+  ] }), '60 s, 55 s');
+  assert.deepStrictEqual(plain(FW.initialSets(hang, null)[0]), { reps: null, weightLb: null, timeMin: null, timeSec: 60, done: false });
+  const last = { sets: [{ reps: null, weightLb: null, timeMin: null, timeSec: 55, done: true }] };
+  assert.deepStrictEqual(plain(FW.initialSets(hang, last)[0]), { reps: null, weightLb: null, timeMin: null, timeSec: 55, done: false });
+  assert.strictEqual(FW.initialSets(hang, last)[1].timeSec, 60); // falls back to target
+  const legacy = { sets: [{ reps: null, weightLb: null, timeMin: 1, done: true }] }; // no timeSec key
+  assert.deepStrictEqual(plain(FW.initialSets(hang, legacy)[0]), { reps: null, weightLb: null, timeMin: null, timeSec: 60, done: false });
+  const mins = ex('m2', { sets: 1, reps: null, weightLb: null, timeMin: 10 });
+  assert.deepStrictEqual(plain(FW.initialSets(mins, { sets: [{ reps: null, weightLb: null, timeMin: 12, done: true }] })[0]),
+    { reps: null, weightLb: null, timeMin: 12, timeSec: null, done: false });
+  const s = plain(FW.buildSession({ id: 'i', day: 3, startedAt: '2026-10-11T14:30:00.000Z', completedAt: null, notes: null,
+    exercises: [hang], log: { h: { sets: [{ reps: null, weightLb: null, timeMin: null, timeSec: '55', done: true }], notes: '' } } }));
+  assert.deepStrictEqual(s.entries[0].sets[0], { reps: null, weightLb: null, timeMin: null, timeSec: 55, done: true });
 });

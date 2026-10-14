@@ -86,7 +86,9 @@ function validateSession(session, routine) {
     entry.sets.forEach(function (set, si) {
       var sp = p + '.sets[' + si + ']';
       if (!isObject_(set)) { errors.push(sp + ' must be an object'); return; }
-      ['reps', 'weightLb', 'timeMin'].forEach(function (f) {
+      ['reps', 'weightLb', 'timeMin', 'timeSec'].forEach(function (f) {
+        // timeSec may be absent in sessions saved before it existed (absent = null).
+        if (f === 'timeSec' && set[f] === undefined) return;
         if (set[f] !== null && !isNonNegNumber_(set[f])) {
           errors.push(sp + '.' + f + ' must be a number >= 0 or null');
         }
