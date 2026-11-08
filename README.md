@@ -5,6 +5,8 @@ remembers what you lifted last time. Your history is saved in **your own Google 
 
 **Use it:** http://fatherworkout.petrellafamily.com
 
+See [Getting Started](getting-started) below.
+
 <p>
   <img src="docs/img/workout.png" alt="Day picker and today's exercises, with a rest timer running" width="270">
   &nbsp;
@@ -16,7 +18,7 @@ My son helped me create a workout plan in a Google Doc, which became the foundat
 obsequiously named it Father Workout, so we're sticking with that name.
 
 Claude Code was used to develop the Google Apps Script.  It's designed to save data in your personal
-Google Drive, so only you have access to the workout data.  See the "Your data and privacy" section
+Google Drive, so only you have access to the workout data.  See the [Your data and privacy](your-data-and-privacy) section
 below for more information.
 
 ## What it does
