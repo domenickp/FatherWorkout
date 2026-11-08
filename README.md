@@ -32,6 +32,12 @@ below for more information.
 - **Picks up where you left off:** an in-progress workout survives closing the tab.
 - **Works on any device:** your phone and computer see the same history.
 
+## What's next
+
+- Workout history analytics. Tracking growth over time, likely with some simple visualiztions.
+- Per-person routines, as opposed to starting everyone from the same template.
+- Stretching routines.
+
 ## Getting started
 
 1. Open **http://fatherworkout.petrellafamily.com** and sign in with your Google account.
@@ -61,7 +67,7 @@ or incognito window and sign in with just one account, or sign out of the others
 ## The routine
 
 Everyone gets the same routine: the author's 4-day dumbbell plan. Changing it means editing
-`data/expanded-routine.csv` and redeploying (see below). Per-person routines may come later.
+`data/expanded-routine.csv` and redeploying (see below).
 
 ---
 
