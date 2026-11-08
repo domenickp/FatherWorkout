@@ -76,6 +76,10 @@ Everyone gets the same routine: the author's 4-day dumbbell plan. Changing it me
 It's a [Google Apps Script](https://developers.google.com/apps-script) web app, with no
 frameworks and no npm dependencies.
 
+I used my [agentic Claude Plugin](https://github.com/domenickp/claude-agentic-kit) to create
+it, so issues are tracked in beads and self-contained within this repository. I bounce around
+from computer to computer, and this makes it easy to contribute no matter where I am.
+
 ```
 src/            what runs on Google's servers (pushed with clasp)
   Code.js         web-app entry point and Drive storage (runs as the visitor)
