@@ -34,7 +34,7 @@ below for more information.
 
 ## Getting started
 
-1. Open **https://fatherworkout.petrellafamily.com** and sign in with your Google account.
+1. Open **http://fatherworkout.petrellafamily.com** and sign in with your Google account.
 2. The first time, Google asks you to allow access. Father Workout only asks to
    **"see, edit, create and delete only the specific Google Drive files you use with this app"**.
    It can't see anything else in your Drive.
