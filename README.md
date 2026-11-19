@@ -17,6 +17,8 @@ See [Getting Started](#getting-started) below.
 My son helped me create a workout plan in a Google Doc, which became the foundation for this routine.  He
 obsequiously named it Father Workout, so we're sticking with that name.
 
+This has since been integrated into [nutrition-tracker](https://github.com/domenickp/nutrition-tracker), which tracks macro intake while taking activity into account.
+
 Claude Code was used to develop the Google Apps Script.  It's designed to save data in your personal
 Google Drive, so only you have access to the workout data.  See the [Your data and privacy](#your-data-and-privacy) section
 below for more information.
